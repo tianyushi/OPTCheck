@@ -1,0 +1,76 @@
+.home {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.home form div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+input[type="file"] {
+    width: 90%;
+    padding: 8px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+input[type="file"]:hover,
+input[type="file"]:focus {
+    border-color: #0056b3;
+}
+
+.disclaimer {
+    font-size: 0.9em;
+    color: #444;
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    text-align: center;
+}
+
+input[type="file"] {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+input[type="file"]:hover {
+    transform: scale(1.02);
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f8;
+    color: #333;
+}
+
+.check-docs-btn {
+    padding: 10px 20px;
+    background-color: #5D3FD3; 
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto; 
+    margin-top: 20px;
+}
+
+.check-docs-btn:hover {
+    background-color: #8265A7; 
+}
