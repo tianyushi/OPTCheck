@@ -1,0 +1,126 @@
+.home {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    background-color: silver;
+}
+
+.home form div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+input[type="file"] {
+    width: 90%;
+    padding: 8px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+    color: #333;
+}
+
+input[type="file"]:hover,
+input[type="file"]:focus {
+    border-color: #0056b3;
+}
+
+.disclaimer {
+    font-size: 0.9em;
+    color: #444;
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    text-align: center;
+}
+
+input[type="file"] {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+input[type="file"]:hover {
+    transform: scale(1.02);
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f8;
+    color: #333;
+}
+
+.check-docs-btn {
+    padding: 10px 20px;
+    background-color: #5D3FD3; 
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto; 
+    margin-top: 20px;
+}
+
+.check-docs-btn:hover {
+    background-color: #8265A7; 
+}
+
+.ask-ai-btn {
+    padding: 8px 16px; 
+    background-color: #FF6347; 
+    color: white;
+    font-size: 15px; 
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 10px 0; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+    align-self: flex-start; 
+}
+
+.ask-ai-btn:hover {
+    background-color: #E5533D; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    width: 100%; 
+}
+
+.faq-btn {
+    padding: 8px 16px;
+    background-color: #3FA9F5;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+
+.faq-btn:hover {
+    background-color: #328ACD; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+}
+
