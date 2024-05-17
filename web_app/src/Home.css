@@ -76,6 +76,14 @@ body {
     background-color: #8265A7; 
 }
 
+.check-docs-btn:disabled {
+    background-color: #ccc;
+    color: #666; 
+    cursor: not-allowed;
+    pointer-events: none; 
+}
+
+
 .ask-ai-btn {
     padding: 8px 16px; 
     background-color: #FF6347; 

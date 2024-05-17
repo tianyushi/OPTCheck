@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import './FAQ.css'; 
 
 function FAQ() {
 
   const [activeIndex, setActiveIndex] = useState(null);
+  const navigate = useNavigate();
+  const goToMainPage = () => {
+    navigate('/');
+};
 
   const questionsAnswers = [
     {
@@ -54,7 +59,7 @@ function FAQ() {
           </div>
         </div>
       ))}
-
+            <button className="exit-button" onClick={() => goToMainPage()}>Go Back</button>
             <p className="disclaimer">
                 Please note: All the FAQ answer are based on university of Chicago OIA OPT Application Checklist.
             </p>
