@@ -40,3 +40,9 @@ The API is hosted at http://localhost:5000
 The Cloud hosted address is ec2-203-0-113-25.compute-1.amazonaws.com NOTE THAT THIS ADDRESS WILL NOT BE MAINTAINED. 
 You may use the same command to deploy the app in your own AWS EC2 instance. 
 To keep the server and web_app running in the EC2. use screen -d -m [start command]
+5. You will need the OpenAI API key. This key is not provided for security reason. Contact the author if you need it. To set up the key in your env, please follow the Step 1 and Step2 of Open AI quickStart here https://platform.openai.com/docs/quickstart
+
+## Citations 
+1. Flask doc https://flask.palletsprojects.com/en/3.0.x/
+2. React doc https://legacy.reactjs.org/docs/getting-started.html
+3. Open AI API set Up & model play ground https://platform.openai.com/docs/overview
