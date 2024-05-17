@@ -46,3 +46,6 @@ To keep the server and web_app running in the EC2. use screen -d -m [start comma
 1. Flask doc https://flask.palletsprojects.com/en/3.0.x/
 2. React doc https://legacy.reactjs.org/docs/getting-started.html
 3. Open AI API set Up & model play ground https://platform.openai.com/docs/overview
+4. USCIS OPT application official guide: https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students
+5. the University of Chicago OIA OPT application guide: https://internationalaffairs.uchicago.edu/page/opt-optional-practical-training
+6. the University of Chicago OPT application checklist: located in web-app src package
