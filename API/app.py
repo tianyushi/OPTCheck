@@ -5,8 +5,8 @@ from openai import OpenAI
 import os
 import mimetypes
 import base64
-import datetime
-import json 
+from datetime import datetime
+import ast
 
 app = Flask(__name__)
 app = Flask(__name__)
@@ -16,7 +16,12 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
     
-    
+def parse_data_to_dict(data_string):
+    try:
+        return dict(ast.literal_eval(data_string))
+    except Exception as e:
+        print(f"Error parsing data: {e}")
+        return {}  
 
 def parse_document(doc, doc_type, mime_type):
 
@@ -49,7 +54,7 @@ def parse_document(doc, doc_type, mime_type):
         )
     }
     
-    prompt = "You act as a role of data analyst, Extract key information from the document:" + prompts.get(doc_type) 
+    prompt = "You act as a role of data analyst, Extract key information from the document:" + prompts.get(doc_type) + "ALSO REMEBER TO INCLUDE THE DOCUMENTNAME AS THE FIRST KEY IN YOUR RESPONSE"
 
     client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     if mime_type == 'application/pdf':
@@ -131,51 +136,66 @@ def extract_text():
     
 @app.route('/validate_documents', methods=['POST'])
 def validate_documents():
-     
 
-    try:
-        i765 = json.loads(request.form.get('i765'))
-        i20 = json.loads( request.form.get('i20'))
-        passport = json.loads(request.form.get('passport'))
-        i94 = json.loads(request.form.get('i94'))
-    except json.JSONDecodeError as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 400
-    results = {}
+        print(type(request.form))
+        prompt = f'You act as a role as an immigration lawyer. The docuemnts is in user content. Your task is to perform the following checks: \n'\
+                 f'1. check the name of i765 is the same as the passport.\n'\
+                 f'2. check the expiration date of passport in i 765 is the same as the passport\n'\
+                 f'3. check place of birth is the same for i765 and passport.\n'\
+                 f'4. check the I-94 number is the same in I94 and I 765\n'\
+                 f'5. check the I 94 Admit until date is \'D/S\'\n'\
+                 f'6. check the i 94 class of admission is F1.\n'\
+                 f'7. check the i94 entry date is less than today, today is {datetime.now().date()} USE TODAT"S DATE IN YOUR ANALYSIS.\n'\
+                 f'8. check the SEVIS number of I-20 and I-765 is the same: ONLY COMPARE THE DIGIT PART\n'\
+                 f'9. check the today has not passed more than 30 days from i-20 travel endorsement issue date today is {datetime.now().date()} USE TODAY"S DATE IN YOUR ANALYSIS, check the isOPT field is true\n'\
+                 f'10. check if the signature of i-20 and i-765 is empty. if no signature field in any document return NOT PASSED.\n'\
+                 f'THE VALUE FORMAT OF VARIOUS DOMENT MAY BE DIFFERENT, DO NOT COMPARE THEM VERY STRICTYLY. YOU SHOULD COMPARE THEM BASED ON MEANING OF THE VALUES.\n'\
+                 f'return the result as a report so that I can present to user in frontend. The title of the report should be Result Based On Provided Document. Each check should have three components in report 1. what is the check , 2. analysis, 3.check result passed or not passed NO OTHER VALUE IN THIS SECTION. STRICTLY follow the return formatt.\n'\
+                 f'here are the documents you need to check:{request.form}\n'\
+                 
+        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": [
+                    {"type": "text", "content": f'here is the documents{request.form}'}
+                ]}
+            ],
+            max_tokens=1000,
+            temperature=0.0,
+            top_p=0.9,
+            frequency_penalty=0.5,
+            presence_penalty=0.5,
+        )
+
+        response_content = response.choices[0].message.content
+        return jsonify(response_content)
+
+@app.route('/ask', methods=['POST'])
+def ask_ChatGPT():
+    prompt = """You act as a role as an immigration lawyer. You will answer the immigration problem for the students regarding the OPT application. Your response must be 100%
+    based on the info from USCIS wbesite or school OIA OPT Application Guide in these links. 1. For the initial OPT application https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students 
+    2.For the STEM OPT application https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-extension-for-stem-students-stem-opt. 
+    3. For the School OIA related question: https://internationalaffairs.uchicago.edu/page/opt-optional-practical-training Note that this is University of Chicago OIA source. You should advise the user to consult their university 
+    for details. if you do not have info available answer I do not know. Do not make up answer. When you response, remember to always cite your response using the info from official source """
     
-    try: 
-        # 1. Name check 
-        full_name_i765 = f"{i765['Full Legal Name']['Given Name (First Name)']} {i765['Full Legal Name']['Family Name (Last Name)']}"
-        full_name_i20 = i20['Name']
-        results['name_match'] = full_name_i765 == full_name_i20
-
-        # 2. Place of birth check
-        results['place_of_birth_match'] = i765['Place of Birth']['City/Town/Village of Birth'] == passport['Place of Birth']
-
-        # 3. Passport number and expiration date check
-        results['passport_number_match'] = i765['Passport Number'] == passport['Passport Number']
-        results['passport_expiration_date_match'] = i765['Passport Expiration Date']['(mm/dd/yyyy)'] == passport['Passport Expiration Date']
-
-        # 4. I-94 checks
-        results['i94_number_match'] = i765['Form I-94 Arrival-Departure Record Number'] == i94['Admission (I-94) Record Number']
-        results['admit_until_ds'] = i94['Admit Until Date'] == 'D/S'
-        results['class_of_admission'] = i94['Class of Admission'] == 'F1'
-        results['entry_date_valid'] = datetime.strptime(i94['Most Recent Date of Entry'], '%Y %B %d') <= datetime.now()
-
-        # 5. SEVIS number match and checks
-        results['sevis_number_match'] = i765['SEVIS Number'] == i20['SEVIS ID']
-        travel_endorsement_date = datetime.strptime(i20['Travel Endorsement']['DATE ISSUED'], '%d %B %Y')
-        results['travel_endorsement_within_30_days'] = (datetime.now() - travel_endorsement_date).days <= 30
-        results['opt_is_true'] = i20['EMPLOYMENT AUTHORIZATIONS']['OPT']
-
-        response = {
-            "validation_results": results,
-            "US_Physical_address": i765["US Physical address"],
-            "Full_Legal_Name": full_name_i765
-        }
-        
-        return jsonify(response)
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 500
+    message = request.form.get('message')
+    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+            {"role": "system", "content": prompt}, 
+            {"role": "user", "content": message} ],
+            max_tokens=1000,  
+            temperature=0.0,  
+            top_p=0.9,  
+            frequency_penalty=0.5,  
+            presence_penalty=0.5
+    )
+    
+    response_content = response.choices[0].message.content
+    return jsonify(response_content)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

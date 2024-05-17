@@ -12,6 +12,7 @@
 }
 
 .messages {
+    width: auto;
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
@@ -29,18 +30,18 @@
 }
 
 .messages .user {
-    margin-left: auto;
+    margin-right: auto; 
     background-color: #0077cc;
     color: white;
-    align-self: flex-end;
+    align-self: flex-start;
     text-align: left;
 }
 
 .messages .bot {
-    margin-right: auto;
+    margin-left: auto;  
     background-color: #e5e5ea;
     color: black;
-    align-self: flex-start;
+    align-self: flex-end; 
     text-align: left;
 }
 
@@ -72,4 +73,3 @@
 .chatbox button:hover {
     background-color: #005fa3;
 }
-
