@@ -53,7 +53,7 @@ function Chatbox() {
                         <i className={msg.icon}></i> <span>{msg.text}</span>
                     </div>
                 ))}
-                {isLoading && <div className="loading">AI Lawyer is THINKING...</div>} {/* Loading indicator */}
+                {isLoading && <div className="loading">AI Lawyer is THINKING...</div>} 
             </div>
             <form onSubmit={handleSubmit}>
                 <input type="text" value={input} onChange={handleInputChange} placeholder="Ask your question here..." disabled={isLoading} />

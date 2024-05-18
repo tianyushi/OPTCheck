@@ -43,7 +43,7 @@ function FAQ() {
   
 
   const toggle = (index) => {
-    setActiveIndex(index === activeIndex ? null : index); // Toggle open/close
+    setActiveIndex(index === activeIndex ? null : index); 
   };
 
   return (
